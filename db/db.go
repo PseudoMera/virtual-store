@@ -1,4 +1,5 @@
 package db
 
-type DB interface {
+type Store interface {
+	DB()
 }
