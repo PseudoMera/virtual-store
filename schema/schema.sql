@@ -1,0 +1,54 @@
+CREATE TYPE order_status AS ENUM('pending', 'completed', 'shipped', 'cancelled');
+
+CREATE TABLE vstore_user (
+    id INT GENERATED ALWAYS AS IDENTITY UNIQUE,
+    email VARCHAR NOT NULL UNIQUE,
+    password VARCHAR NOT NULL,
+    created_at   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE user_profile (
+    id INT GENERATED ALWAYS AS IDENTITY UNIQUE,
+    user_id  INTEGER NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES vstore_user (id) ON DELETE CASCADE,
+    UNIQUE(user_id),
+    name VARCHAR NOT NULL,
+    photo VARCHAR,
+    country VARCHAR NOT NULL,
+    address VARCHAR NOT NULL,
+    phone VARCHAR,
+    created_at   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE product (
+    id INT GENERATED ALWAYS AS IDENTITY UNIQUE,
+    name VARCHAR NOT NULL UNIQUE,
+    price NUMERIC(12, 2) NOT NULL,
+    stock INT NOT NULL,
+    created_at   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE user_order (
+    id INT GENERATED ALWAYS AS IDENTITY UNIQUE,
+    user_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES vstore_user (id) ON DELETE CASCADE,
+    total_price NUMERIC(12, 2) NOT NULL,
+    status order_status DEFAULT 'pending',
+  	UNIQUE(user_id),
+    created_at   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE user_order_product (
+    product_id INT NOT NULL,
+    user_order_id INT NOT NULL,
+    FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE CASCADE,
+    FOREIGN KEY (user_order_id) REFERENCES user_order (id) ON DELETE CASCADE,
+    quantity INT NOT NULL,
+    price NUMERIC(12, 2) NOT NULL,
+    created_at   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
