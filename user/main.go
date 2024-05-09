@@ -5,13 +5,16 @@ import (
 	"time"
 
 	"github.com/PseudoMera/virtual-store/db"
+	"github.com/PseudoMera/virtual-store/user/store"
 )
 
 func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	_, err := db.NewDatabase(ctx)
+	database, err := db.NewDatabase(ctx)
 	if err != nil {
 		panic(err)
 	}
 	defer cancel()
+
+	_ = store.NewStore(database.DB())
 }
