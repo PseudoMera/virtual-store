@@ -38,13 +38,14 @@ type Profile struct {
 	UpdatedAt time.Time
 }
 
-func (s *Store) StoreUser(ctx context.Context, user User) error {
+func (s *Store) StoreUser(ctx context.Context, user User) (int, error) {
 	hPassword, err := hashPassword(user.Password)
 	if err != nil {
-		return err
+		return 0, err
 	}
-	_, err = s.db.Exec(ctx, "INSERT INTO vstore_user(email, password) VALUES($1, $2)", user.Email, hPassword)
-	return err
+	var id int
+	err = s.db.QueryRow(ctx, "INSERT INTO vstore_user(email, password) VALUES($1, $2) RETURNING id", user.Email, hPassword).Scan(&id)
+	return id, err
 }
 
 func (s *Store) RetrieveUser(ctx context.Context, email string) (*User, error) {
@@ -53,9 +54,10 @@ func (s *Store) RetrieveUser(ctx context.Context, email string) (*User, error) {
 	return user, err
 }
 
-func (s *Store) StoreUserProfile(ctx context.Context, profile Profile) error {
-	_, err := s.db.Exec(ctx, "INSERT INTO user_profile(user_id, name, photo, country, address, phone) VALUES($1, $2, $3, $4, $5, $6)", profile.UserID, profile.Name, profile.Photo, profile.Country, profile.Address, profile.Phone)
-	return err
+func (s *Store) StoreUserProfile(ctx context.Context, profile Profile) (int, error) {
+	var id int
+	err := s.db.QueryRow(ctx, "INSERT INTO user_profile(user_id, name, photo, country, address, phone) VALUES($1, $2, $3, $4, $5, $6) RETURNING id", profile.UserID, profile.Name, profile.Photo, profile.Country, profile.Address, profile.Phone).Scan(&id)
+	return id, err
 }
 
 func (s *Store) RetrieveUserProfile(ctx context.Context, userID int) (*Profile, error) {
