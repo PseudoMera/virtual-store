@@ -2,8 +2,14 @@ package service
 
 import (
 	"context"
+	"errors"
 
 	"github.com/PseudoMera/virtual-store/user/store"
+)
+
+var (
+	errEmptyEmail    = errors.New("email field cannot be empty")
+	errEmptyPassword = errors.New("password field cannot be empty")
 )
 
 type UserService struct {
@@ -18,10 +24,10 @@ func NewUserService(db *store.Store) *UserService {
 
 func (u *UserService) CreateUser(ctx context.Context, email, password string) error {
 	if email == "" {
-		return nil
+		return errEmptyEmail
 	}
 	if password == "" {
-		return nil
+		return errEmptyPassword
 	}
 
 	user := store.User{
@@ -29,4 +35,12 @@ func (u *UserService) CreateUser(ctx context.Context, email, password string) er
 		Password: password,
 	}
 	return u.db.StoreUser(ctx, user)
+}
+
+func (u *UserService) GetUser(ctx context.Context, email string) (*store.User, error) {
+	if email == "" {
+		return nil, errEmptyEmail
+	}
+
+	return u.db.RetrieveUser(ctx, email)
 }

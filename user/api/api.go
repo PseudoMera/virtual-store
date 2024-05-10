@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/PseudoMera/virtual-store/shared"
 	"github.com/PseudoMera/virtual-store/user/service"
 	"github.com/PseudoMera/virtual-store/user/store"
 )
@@ -28,14 +29,34 @@ type CreateUserRequest struct {
 func (u *UserAPI) CreateUser(w http.ResponseWriter, r *http.Request) {
 	var req CreateUserRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		shared.WriteErrorResponse(w, err, http.StatusBadRequest)
 		return
 	}
 
 	if err := u.service.CreateUser(r.Context(), req.Email, req.Password); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		shared.WriteErrorResponse(w, err, http.StatusBadRequest)
 		return
 	}
 
 	w.WriteHeader(http.StatusCreated)
+}
+
+type GetUserRequest struct {
+	Email string `json:"email"`
+}
+
+func (u *UserAPI) GetUser(w http.ResponseWriter, r *http.Request) {
+	var req GetUserRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	user, err := u.service.GetUser(r.Context(), req.Email)
+	if err != nil {
+		shared.WriteErrorResponse(w, err, http.StatusBadRequest)
+		return
+	}
+
+	shared.WriteResponse(http.StatusOK, user, w)
 }
