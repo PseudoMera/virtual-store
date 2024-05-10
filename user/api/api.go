@@ -26,6 +26,10 @@ type CreateUserRequest struct {
 	Password string `json:"password"`
 }
 
+type CreateUserResponse struct {
+	ID int `json:"id"`
+}
+
 func (u *UserAPI) CreateUser(w http.ResponseWriter, r *http.Request) {
 	var req CreateUserRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -33,12 +37,15 @@ func (u *UserAPI) CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := u.service.CreateUser(r.Context(), req.Email, req.Password); err != nil {
+	id, err := u.service.CreateUser(r.Context(), req.Email, req.Password)
+	if err != nil {
 		shared.WriteErrorResponse(w, err, http.StatusBadRequest)
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
+	shared.WriteResponse(http.StatusCreated, CreateUserResponse{
+		ID: id,
+	}, w)
 }
 
 type GetUserRequest struct {
@@ -59,4 +66,35 @@ func (u *UserAPI) GetUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	shared.WriteResponse(http.StatusOK, user, w)
+}
+
+type CreateUserProfileRequest struct {
+	UserID  int    `json:"user_id"`
+	Name    string `json:"name"`
+	Photo   string `json:"photo"`
+	Country string `json:"country"`
+	Address string `json:"address"`
+	Phone   string `json:"phone"`
+}
+
+type CreateUserProfileResponse struct {
+	ID int `json:"id"`
+}
+
+func (u *UserAPI) CreateUserProfile(w http.ResponseWriter, r *http.Request) {
+	var req CreateUserProfileRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	id, err := u.service.CreateUserProfile(r.Context(), req.UserID, req.Name, req.Photo, req.Country, req.Address, req.Phone)
+	if err != nil {
+		shared.WriteErrorResponse(w, err, http.StatusBadRequest)
+		return
+	}
+
+	shared.WriteResponse(http.StatusCreated, CreateUserProfileResponse{
+		ID: id,
+	}, w)
 }

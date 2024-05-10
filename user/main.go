@@ -26,7 +26,7 @@ func main() {
 
 	router.Post("/api/v1/user", userAPI.CreateUser)
 
-	if err := http.ListenAndServe(":3000", nil); err != nil {
+	if err := http.ListenAndServe(":3000", router); err != nil {
 		panic(err)
 	}
 }
