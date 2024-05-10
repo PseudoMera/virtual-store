@@ -98,3 +98,47 @@ func (u *UserAPI) CreateUserProfile(w http.ResponseWriter, r *http.Request) {
 		ID: id,
 	}, w)
 }
+
+type GetUserProfileRequest struct {
+	UserID int `json:"user_id"`
+}
+
+func (u *UserAPI) GetUserProfile(w http.ResponseWriter, r *http.Request) {
+	var req GetUserProfileRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	profile, err := u.service.RetrieveUserProfile(r.Context(), req.UserID)
+	if err != nil {
+		shared.WriteErrorResponse(w, err, http.StatusBadRequest)
+		return
+	}
+
+	shared.WriteResponse(http.StatusOK, profile, w)
+}
+
+type UpdateUserProfileRequest struct {
+	UserID  int    `json:"user_id"`
+	Name    string `json:"name"`
+	Photo   string `json:"photo"`
+	Country string `json:"country"`
+	Address string `json:"address"`
+	Phone   string `json:"phone"`
+}
+
+func (u *UserAPI) UpdateUserProfile(w http.ResponseWriter, r *http.Request) {
+	var req UpdateUserProfileRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	if err := u.service.UpdateUserProfile(r.Context(), req.UserID, req.Name, req.Photo, req.Country, req.Address, req.Phone); err != nil {
+		shared.WriteErrorResponse(w, err, http.StatusBadRequest)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}

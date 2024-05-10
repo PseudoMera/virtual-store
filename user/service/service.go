@@ -80,3 +80,41 @@ func (u *UserService) CreateUserProfile(ctx context.Context, userID int, name st
 		Phone:   phone,
 	})
 }
+
+func (u *UserService) RetrieveUserProfile(ctx context.Context, userID int) (*store.Profile, error) {
+	if userID == 0 {
+		return nil, errEmptyUserID
+	}
+
+	return u.db.RetrieveUserProfile(ctx, userID)
+}
+
+func (u *UserService) UpdateUserProfile(ctx context.Context, userID int, name string, photo string, country string, address string, phone string) error {
+	if userID == 0 {
+		return errEmptyUserID
+	}
+	if name == "" {
+		return errEmptyName
+	}
+	if photo == "" {
+		return errEmptyPhoto
+	}
+	if country == "" {
+		return errEmptyCountry
+	}
+	if address == "" {
+		return errEmptyAddress
+	}
+	if phone == "" {
+		return errEmptyPhone
+	}
+
+	return u.db.UpdateUserProfile(ctx, store.Profile{
+		UserID:  userID,
+		Name:    name,
+		Photo:   photo,
+		Country: country,
+		Address: address,
+		Phone:   phone,
+	})
+}
