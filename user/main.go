@@ -22,7 +22,7 @@ func main() {
 	router := api.NewRouter()
 	store := store.NewStore(database.DB())
 	userService := service.NewUserService(store)
-	userAPI := api.NewUserAPI(store, userService)
+	userAPI := api.NewUserAPI(userService)
 
 	router.Post("/api/v1/user", userAPI.CreateUser)
 
