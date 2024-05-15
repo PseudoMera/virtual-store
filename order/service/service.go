@@ -24,18 +24,21 @@ func NewOrderService(db *store.Store) *OrderService {
 	}
 }
 
-func (o *OrderService) CreateOrder(ctx context.Context, userID int, totalPrice float64) (int, error) {
+func (o *OrderService) CreateOrder(ctx context.Context, userID int, totalPrice float64, status store.OrderStatus) (int, error) {
 	if userID == 0 {
 		return 0, errEmptyUserID
 	}
 	if totalPrice == 0.0 {
 		return 0, errEmptyTotalPrice
 	}
+	if status == "" {
+		return 0, errEmptyStatus
+	}
 
 	return o.db.StoreOrder(ctx, store.Order{
 		UserID:     userID,
 		TotalPrice: totalPrice,
-		Status:     store.Pending,
+		Status:     status,
 	})
 }
 
