@@ -5,18 +5,15 @@ import (
 	"net/http"
 
 	"github.com/PseudoMera/virtual-store/product/service"
-	"github.com/PseudoMera/virtual-store/product/store"
 	"github.com/PseudoMera/virtual-store/shared"
 )
 
 type ProductAPI struct {
-	db      *store.Store
 	service *service.ProductService
 }
 
-func NewProductAPI(db *store.Store, service *service.ProductService) *ProductAPI {
+func NewProductAPI(service *service.ProductService) *ProductAPI {
 	return &ProductAPI{
-		db:      db,
 		service: service,
 	}
 }

@@ -6,17 +6,14 @@ import (
 
 	"github.com/PseudoMera/virtual-store/shared"
 	"github.com/PseudoMera/virtual-store/user/service"
-	"github.com/PseudoMera/virtual-store/user/store"
 )
 
 type UserAPI struct {
-	db      *store.Store
 	service *service.UserService
 }
 
-func NewUserAPI(db *store.Store, service *service.UserService) *UserAPI {
+func NewUserAPI(service *service.UserService) *UserAPI {
 	return &UserAPI{
-		db:      db,
 		service: service,
 	}
 }
