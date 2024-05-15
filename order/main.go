@@ -2,8 +2,11 @@ package main
 
 import (
 	"context"
+	"net/http"
 	"time"
 
+	"github.com/PseudoMera/virtual-store/order/api"
+	"github.com/PseudoMera/virtual-store/order/service"
 	"github.com/PseudoMera/virtual-store/order/store"
 	"github.com/PseudoMera/virtual-store/shared"
 )
@@ -16,5 +19,14 @@ func main() {
 	}
 	defer cancel()
 
-	_ = store.NewStore(database.DB())
+	router := api.NewRouter()
+	store := store.NewStore(database.DB())
+	orderService := service.NewOrderService(store)
+	orderAPI := api.NewOrderAPI(orderService)
+
+	router.Post("/api/v1/order", orderAPI.CreateOrder)
+
+	if err := http.ListenAndServe(":3000", router); err != nil {
+		panic(err)
+	}
 }

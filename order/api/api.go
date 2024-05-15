@@ -13,7 +13,7 @@ type OrderAPI struct {
 	service *service.OrderService
 }
 
-func NewOrderService(service *service.OrderService) *OrderAPI {
+func NewOrderAPI(service *service.OrderService) *OrderAPI {
 	return &OrderAPI{
 		service: service,
 	}
