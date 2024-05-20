@@ -19,9 +19,10 @@ func main() {
 	}
 	defer cancel()
 
+	logger := shared.NewLogger()
 	router := api.NewRouter()
 	store := store.NewStore(database.DB())
-	orderService := service.NewOrderService(store)
+	orderService := service.NewOrderService(store, logger)
 	orderAPI := api.NewOrderAPI(orderService)
 
 	router.Post("/api/v1/order", orderAPI.CreateOrder)
