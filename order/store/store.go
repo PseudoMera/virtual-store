@@ -23,7 +23,7 @@ var (
 	Pending   OrderStatus = "pending"
 	Completed OrderStatus = "completed"
 	Shipped   OrderStatus = "shipped"
-	Canceleld OrderStatus = "cancelled"
+	Cancelled OrderStatus = "cancelled"
 )
 
 type Order struct {
@@ -37,13 +37,13 @@ type Order struct {
 
 func (s *Store) StoreOrder(ctx context.Context, order Order) (int, error) {
 	var id int
-	err := s.db.QueryRow(ctx, "INSERT INTO user_order(user_id, total_price, status) VALUES($1, $2, $3 RETURNING id)", order.UserID, order.TotalPrice, string(order.Status)).Scan(&id)
-	return 0, err
+	err := s.db.QueryRow(ctx, "INSERT INTO user_order(user_id, total_price, status) VALUES($1, $2, $3) RETURNING id", order.UserID, order.TotalPrice, string(order.Status)).Scan(&id)
+	return id, err
 }
 
 func (s *Store) RetrieveOrder(ctx context.Context, id int) (*Order, error) {
 	order := new(Order)
-	err := s.db.QueryRow(ctx, "SELECT * FROM order WHERE id = $1", id).Scan(&order)
+	err := s.db.QueryRow(ctx, "SELECT id, user_id, total_price, status, created_at, updated_at FROM user_order WHERE id = $1", id).Scan(&order.ID, &order.UserID, &order.TotalPrice, &order.Status, &order.CreatedAt, &order.UpdatedAt)
 	return order, err
 }
 
