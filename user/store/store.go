@@ -62,7 +62,7 @@ func (s *Store) StoreUserProfile(ctx context.Context, profile Profile) (int, err
 
 func (s *Store) RetrieveUserProfile(ctx context.Context, userID int) (*Profile, error) {
 	profile := new(Profile)
-	err := s.db.QueryRow(ctx, "SELECT id, name, photo, country, address, phone, created_at FROM user_profile WHERE user_id = $1", userID).Scan(&profile.ID, &profile.Name, &profile.Photo, &profile.Country, &profile.Address, &profile.Phone, &profile.CreatedAt)
+	err := s.db.QueryRow(ctx, "SELECT id, user_id, name, photo, country, address, phone, created_at FROM user_profile WHERE user_id = $1", userID).Scan(&profile.ID, &profile.UserID, &profile.Name, &profile.Photo, &profile.Country, &profile.Address, &profile.Phone, &profile.CreatedAt)
 	return profile, err
 }
 

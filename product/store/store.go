@@ -34,7 +34,7 @@ func (s *Store) StoreProduct(ctx context.Context, product Product) (int, error) 
 
 func (s *Store) RetrieveProduct(ctx context.Context, id int) (*Product, error) {
 	product := new(Product)
-	err := s.db.QueryRow(ctx, "SELECT * FROM product WHERE id = $1", id).Scan(&product)
+	err := s.db.QueryRow(ctx, "SELECT id, name, price, stock, created_at, updated_at FROM product WHERE id = $1", id).Scan(&product.ID, &product.Name, &product.Price, &product.Stock, &product.CreatedAt, &product.UpdatedAt)
 	return product, err
 }
 
