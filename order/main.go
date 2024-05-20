@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/PseudoMera/virtual-store/order/api"
@@ -13,7 +14,7 @@ import (
 
 func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	database, err := shared.NewDatabase(ctx)
+	database, err := shared.NewPostgresDatabase(ctx, os.Getenv("CONNECTION_STRING"))
 	if err != nil {
 		panic(err)
 	}

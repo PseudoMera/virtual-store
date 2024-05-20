@@ -2,7 +2,6 @@ package shared
 
 import (
 	"context"
-	"os"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -11,8 +10,8 @@ type PostgresDB struct {
 	db *pgxpool.Pool
 }
 
-func NewDatabase(ctx context.Context) (*PostgresDB, error) {
-	pool, err := pgxpool.New(ctx, os.Getenv("DATABASE_URL"))
+func NewPostgresDatabase(ctx context.Context, connectionStr string) (*PostgresDB, error) {
+	pool, err := pgxpool.New(ctx, connectionStr)
 	if err != nil {
 		return nil, err
 	}
