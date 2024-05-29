@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	config := config()
+	config := getConfig()
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	database, err := shared.NewPostgresDatabase(ctx, config.connectionString)
 	if err != nil {
