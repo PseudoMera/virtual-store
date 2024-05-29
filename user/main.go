@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/PseudoMera/virtual-store/shared"
@@ -13,8 +13,9 @@ import (
 )
 
 func main() {
+	config := config()
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	database, err := shared.NewPostgresDatabase(ctx, os.Getenv("CONNECTION_STRING"))
+	database, err := shared.NewPostgresDatabase(ctx, config.connectionString)
 	if err != nil {
 		panic(err)
 	}
@@ -28,7 +29,7 @@ func main() {
 
 	router.Post("/api/v1/user", userAPI.CreateUser)
 
-	if err := http.ListenAndServe(":3000", router); err != nil {
+	if err := http.ListenAndServe(fmt.Sprintf(":%s", config.httpServerPort), router); err != nil {
 		panic(err)
 	}
 }
