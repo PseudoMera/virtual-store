@@ -12,6 +12,10 @@ import (
 	"github.com/PseudoMera/virtual-store/shared"
 )
 
+const (
+	apiPath = "/api/v1"
+)
+
 func main() {
 	config := getConfig()
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -27,7 +31,11 @@ func main() {
 	orderService := service.NewOrderService(store, logger)
 	orderAPI := api.NewOrderAPI(orderService)
 
-	router.Post("/api/v1/order", orderAPI.CreateOrder)
+	router.Post(fmt.Sprintf("%s/order", apiPath), orderAPI.CreateOrder)
+	router.Get(fmt.Sprintf("%s/order", apiPath), orderAPI.GetOrder)
+	router.Get(fmt.Sprintf("%s/user-order", apiPath), orderAPI.GetOrdersByUser)
+	router.Put(fmt.Sprintf("%s/order", apiPath), orderAPI.UpdateOrder)
+	router.Put(fmt.Sprintf("%s/order/status", apiPath), orderAPI.UpdateOrderStatus)
 
 	if err := http.ListenAndServe(fmt.Sprintf(":%s", config.httpServerPort), router); err != nil {
 		panic(err)
