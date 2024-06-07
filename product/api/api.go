@@ -66,12 +66,12 @@ func (p *ProductAPI) GetProduct(w http.ResponseWriter, r *http.Request) {
 	shared.WriteResponse(http.StatusOK, product, w)
 }
 
-type GetProducsRequest struct {
+type GetProductsRequest struct {
 	Name string `json:"name"`
 }
 
 func (p *ProductAPI) GetProducts(w http.ResponseWriter, r *http.Request) {
-	var req GetProducsRequest
+	var req GetProductsRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		shared.WriteErrorResponse(w, err, http.StatusBadRequest)
 		return
