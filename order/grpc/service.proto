@@ -1,0 +1,56 @@
+syntax = "proto3";
+option go_package = "https://github.com/PseudoMera/virtual-store/order/grpc";
+
+package grpc;
+
+service OrderService {
+    rpc CreateOrder(CreateOrderRequest) returns(CreateOrderResponse) {}
+    rpc GetOrder(GetOrderRequest) returns(Order) {}
+    rpc GetOrdersByUser(GetOrdersByUserRequest) returns (GetOrdersByUserResponse) {}
+    rpc UpdateOrder(UpdateOrderRequest) returns(SuccessResponse) {}
+    rpc UpdateOrderStatus(UpdateOrderStatusRequest) returns(SuccessResponse) {}
+}
+
+message CreateOrderRequest {
+    int64 userID = 1;
+    float totalPrice = 2;
+    string status = 3;
+}
+
+message CreateOrderResponse {
+    int64 id = 1;
+}
+
+message GetOrderRequest {
+    int64 id = 1;
+}
+
+message Order {
+    int64 id = 1;
+    int64 userID = 2;
+    float totalPrice = 3;
+    string status = 4;
+}
+
+message GetOrdersByUserRequest {
+    int64 userID = 1;
+}
+
+message GetOrdersByUserResponse {
+    repeated Order orders = 1;
+}
+
+message UpdateOrderRequest {
+    int64 id = 1;
+    string status = 2;
+    float totalPrice = 3;
+}
+
+message SuccessResponse {
+    string message = 1;
+}
+
+message UpdateOrderStatusRequest {
+    int64 id = 1;
+    string status = 2;
+}
