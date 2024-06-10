@@ -19,7 +19,7 @@ func NewStore(db *pgxpool.Pool) *Store {
 }
 
 type User struct {
-	ID        int64
+	ID        int
 	Email     string
 	Password  string
 	CreatedAt time.Time

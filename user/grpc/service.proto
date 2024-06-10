@@ -6,6 +6,25 @@ package grpc;
 service UserService {
     rpc GetUser(GetUserRequest) returns (User) {}
     rpc CreateUser(CreateUserRequest) returns (User) {}
+    rpc CreateUserProfile(CreateUserProfileRequest) returns (CreateUserProfileResponse) {}
+    rpc GetUserProfile(GetUserProfileRequest) returns (Profile) {}
+    rpc UpdateUserProfile(UpdateUserProfileRequest) returns (SuccessResponse) {}
+}
+
+message User {
+    int64 id = 1;
+    string email = 2;
+    string password = 3;
+}
+
+message Profile {
+    int64 id = 1;
+    int64 userID = 2;
+    string name = 3;
+    string photo = 4;
+    string country = 5;
+    string address = 6;
+    string phone = 7;
 }
 
 message GetUserRequest {
@@ -17,8 +36,32 @@ message CreateUserRequest {
     string password = 2;
 }
 
-message User {
+message CreateUserProfileRequest {
     int64 id = 1;
-    string email = 2;
-    string password = 3;
+    string name = 2;
+    string photo = 3;
+    string country = 4;
+    string address = 5;
+    string phone = 6;
+}
+
+message CreateUserProfileResponse {
+    int64 id = 1;
+}
+
+message GetUserProfileRequest {
+    int64 id = 1;
+}
+
+message UpdateUserProfileRequest {
+    int64 userID = 1;
+    string name = 2;
+    string photo = 3;
+    string country = 4;
+    string address = 5;
+    string phone = 6;
+}
+
+message SuccessResponse {
+    string msg = 1;
 }
