@@ -1,0 +1,24 @@
+syntax = "proto3";
+option go_package = "https://github.com/PseudoMera/virtual-store/user/grpc";
+
+package grpc;
+
+service UserService {
+    rpc GetUser(GetUserRequest) returns (User) {}
+    rpc CreateUser(CreateUserRequest) returns (User) {}
+}
+
+message GetUserRequest {
+    string email = 1;
+}
+
+message CreateUserRequest {
+    string email = 1;
+    string password = 2;
+}
+
+message User {
+    int64 id = 1;
+    string email = 2;
+    string password = 3;
+}
