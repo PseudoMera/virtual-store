@@ -40,7 +40,7 @@ func main() {
 	router.Put(fmt.Sprintf("%s/order", apiPath), orderAPI.UpdateOrder)
 	router.Put(fmt.Sprintf("%s/order/status", apiPath), orderAPI.UpdateOrderStatus)
 
-	lis, err := net.Listen("tcp", ":3010")
+	lis, err := net.Listen("tcp", config.grpcServerPort)
 	if err != nil {
 		panic(err)
 	}

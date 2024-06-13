@@ -40,7 +40,7 @@ func main() {
 	router.Get(fmt.Sprintf("%s/user/profile", apiPath), userAPI.GetUserProfile)
 	router.Put(fmt.Sprintf("%s/user/profile", apiPath), userAPI.UpdateUserProfile)
 
-	lis, err := net.Listen("tcp", ":3010")
+	lis, err := net.Listen("tcp", config.grpcServerPort)
 	if err != nil {
 		panic(err)
 	}
