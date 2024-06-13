@@ -26,11 +26,13 @@ services:
       args:
         BUILD_PATH: user
     ports:
-        - 3000:3000
+      - 3000:3000
+      - 3010:3010
     restart: always
     environment:
       CONNECTION_STRING: "postgresql://postgres:postgres@db:5432/postgres?sslmode=disable"
       HTTP_SERVER_PORT: "3000"
+      GRPC_SERVER_PORT: "3010"
     env_file:
       - .env
     depends_on:
@@ -47,6 +49,7 @@ services:
         BUILD_PATH: order
     ports:
       - 3001:3000
+      - 3011:3010
     restart: always
     environment:
       CONNECTION_STRING: "postgresql://postgres:postgres@db:5432/postgres?sslmode=disable"
@@ -67,6 +70,7 @@ services:
         BUILD_PATH: product
     ports:
       - 3002:3000
+      - 3012:3010
     restart: always
     environment:
       CONNECTION_STRING: "postgresql://postgres:postgres@db:5432/postgres?sslmode=disable"

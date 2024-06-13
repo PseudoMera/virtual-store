@@ -37,7 +37,6 @@ CREATE TABLE user_order (
     FOREIGN KEY (user_id) REFERENCES vstore_user (id) ON DELETE CASCADE,
     total_price NUMERIC(12, 2) NOT NULL,
     status order_status DEFAULT 'pending',
-  	UNIQUE(user_id),
     created_at   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
