@@ -5,8 +5,8 @@ package grpc;
 
 service ProductService {
     rpc CreateProduct(CreateProductRequest) returns(CreateProductResponse) {}
-    rpc GetProduct(GetProductRequest) returns(SuccessResponse) {}
-    rpc GetProducts(GetProductRequest) returns (GetProductsResponse) {}
+    rpc GetProduct(GetProductRequest) returns(GetProductResponse) {}
+    rpc GetProducts(GetProductsRequest) returns (GetProductsResponse) {}
     rpc UpdateProductRequest(Product) returns (SuccessResponse) {}
     rpc UpdateProductStock(UpdateProductStockRequest) returns (SuccessResponse) {}
 }
@@ -30,6 +30,10 @@ message CreateProductResponse {
 
 message GetProductRequest {
     int64 id = 1;
+}
+
+message GetProductResponse {
+    Product product = 1;
 }
 
 message SuccessResponse {
