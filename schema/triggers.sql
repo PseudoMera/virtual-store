@@ -1,3 +1,6 @@
+/*
+    Updates the updated_at column when a record is modified
+*/
 CREATE OR REPLACE FUNCTION update_modified_column()
 RETURNS TRIGGER AS $$
 BEGIN

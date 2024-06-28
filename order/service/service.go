@@ -20,6 +20,10 @@ type OrderService struct {
 	logger *slog.Logger
 }
 
+// NewOrderService returns a OrderService with the given db and logger.
+// The order service can be used to interact with the database through
+// the Store struct. The service also has validation for the methods
+// so it's better to use this than directly interacting with the Store struct.
 func NewOrderService(db *store.Store, logger *slog.Logger) *OrderService {
 	return &OrderService{
 		db:     db,
@@ -27,6 +31,7 @@ func NewOrderService(db *store.Store, logger *slog.Logger) *OrderService {
 	}
 }
 
+// CreateOrder creates a new order with the given userID, totalPrice and status.
 func (o *OrderService) CreateOrder(ctx context.Context, userID int, totalPrice float64, status store.OrderStatus) (int, error) {
 	if userID == 0 {
 		o.logger.Info("error at CreateOrder", slog.String("error", errEmptyId.Error()))
@@ -48,6 +53,7 @@ func (o *OrderService) CreateOrder(ctx context.Context, userID int, totalPrice f
 	})
 }
 
+// GetOrder returns the order associated with the given id.
 func (o *OrderService) GetOrder(ctx context.Context, id int) (*store.Order, error) {
 	if id == 0 {
 		o.logger.Info("error at GetOrder", slog.String("error", errEmptyId.Error()))
@@ -57,6 +63,7 @@ func (o *OrderService) GetOrder(ctx context.Context, id int) (*store.Order, erro
 	return o.db.RetrieveOrder(ctx, id)
 }
 
+// GetOrdersByUser returns all the orders for a given user id.
 func (o *OrderService) GetOrdersByUser(ctx context.Context, userID int) ([]*store.Order, error) {
 	if userID == 0 {
 		o.logger.Info("error at GetOrdersByUser", slog.String("error", errEmptyUserID.Error()))
@@ -66,6 +73,7 @@ func (o *OrderService) GetOrdersByUser(ctx context.Context, userID int) ([]*stor
 	return o.db.RetrieveOrdersByUserID(ctx, userID)
 }
 
+// UpdateOrder updates the order with the given id.
 func (o *OrderService) UpdateOrder(ctx context.Context, id int, status store.OrderStatus, totalPrice float64) error {
 	if id == 0 {
 		o.logger.Info("error at UpdateOrder", slog.String("error", errEmptyId.Error()))
@@ -87,6 +95,7 @@ func (o *OrderService) UpdateOrder(ctx context.Context, id int, status store.Ord
 	})
 }
 
+// UpdateOrderStatus updates the order status with the given id.
 func (o *OrderService) UpdateOrderStatus(ctx context.Context, id int, status store.OrderStatus) error {
 	if id == 0 {
 		o.logger.Info("error at UpdateOrder", slog.String("error", errEmptyId.Error()))

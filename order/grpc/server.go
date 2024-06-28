@@ -11,6 +11,7 @@ type OrderServer struct {
 	UnimplementedOrderServiceServer
 }
 
+// NewOrderServer returns a GRPC server with the given database
 func NewOrderServer(db *store.Store) *OrderServer {
 	return &OrderServer{
 		db: db,

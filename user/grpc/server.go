@@ -25,6 +25,7 @@ type UserServer struct {
 	UnimplementedUserServiceServer
 }
 
+// NewUserServer returns a GRPC server with the given database
 func NewUserServer(db *store.Store) *UserServer {
 	return &UserServer{
 		db: db,
