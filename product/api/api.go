@@ -12,6 +12,7 @@ type ProductAPI struct {
 	service *service.ProductService
 }
 
+// NewProductAPI returns a new product API given an instance of a product service.
 func NewProductAPI(service *service.ProductService) *ProductAPI {
 	return &ProductAPI{
 		service: service,

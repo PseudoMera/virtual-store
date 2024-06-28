@@ -12,6 +12,7 @@ type UserAPI struct {
 	service *service.UserService
 }
 
+// NewUserAPI returns a new user API given an instance of a user service.
 func NewUserAPI(service *service.UserService) *UserAPI {
 	return &UserAPI{
 		service: service,

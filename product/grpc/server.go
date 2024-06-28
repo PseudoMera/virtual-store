@@ -19,6 +19,7 @@ type ProductServer struct {
 	UnimplementedProductServiceServer
 }
 
+// NewProductServer returns a GRPC server with the given database
 func NewProductServer(db *store.Store) *ProductServer {
 	return &ProductServer{
 		db: db,

@@ -11,6 +11,8 @@ type Store struct {
 	db *pgxpool.Pool
 }
 
+// NewStore takes a pgx pool as parameter and returns a Store struct which can be used to interact
+// with a postgres database
 func NewStore(db *pgxpool.Pool) *Store {
 	return &Store{
 		db: db,

@@ -13,6 +13,7 @@ type OrderAPI struct {
 	service *service.OrderService
 }
 
+// NewOrderAPI returns a new order API given an instance of an order service.
 func NewOrderAPI(service *service.OrderService) *OrderAPI {
 	return &OrderAPI{
 		service: service,
